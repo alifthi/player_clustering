@@ -1,7 +1,7 @@
 import cv2 
 import numpy as np
 from glob import glob
-from config import EXTRACTED_MASKED_PERSON_PATH, COCO_NAMES, COCO_PB,\
+from config import EXTRACTED_MASKED_PERSON_PATH, INPUT_SHAPE, COCO_PB,\
                     COCO_PBTXT, MAIN_PICTURES_PATH, MASKED, EXTRACTED_PERSON_PATH
 class extract_persons:
     def __init__(self) -> None:
@@ -58,3 +58,17 @@ class extract_persons:
                 player = img[y:y2,x:x2]
                 name = str(i) + '_' + path.split('/')[-1]
                 cv2.imwrite(EXTRACTED_MASKED_PERSON_PATH + name,player)
+    def load_extracted(self):
+        images = []
+        for i,path in enumerate(glob(EXTRACTED_MASKED_PERSON_PATH+'*')):
+            img = cv2.imread(path)    
+            if img.shape[0]*img.shape[1]*img.shape[2] > 8000:
+                continue
+            img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            img = cv2.resize(img,INPUT_SHAPE[:-1])
+            img = img/255.0
+            images.append(img)
+            if i %100 == 0:
+                print(i,' images loaded')
+        print(np.shape(images))
+        return np.array(images)
