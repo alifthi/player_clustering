@@ -3,7 +3,9 @@ from keras import layers as ksl
 from glob import glob
 import cv2 as cv
 import numpy as np
-from config import SAVE_MODEL_PATH, INPUT_SHAPE, EMBEDDING_DIM, LEARNING_RATE, LOSS, METRICS
+from config import SAVE_MODEL_PATH, INPUT_SHAPE, EMBEDDING_DIM,\
+                    LEARNING_RATE, LOSS, METRICS,\
+                    EPOCHS, BATCH_SIZE, VALIDATION_SPLIT
                     
 
 class train_model:
@@ -41,9 +43,10 @@ class train_model:
     def compile_model(self):
         optim = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
         self.AEModel.compile(loss=LOSS,optimizer=optim,metrics=METRICS)
-    def train_model(self):
-        pass
+    def train_model(self,images):
+        self.AEModel.fit(images,images,epochs=EPOCHS,batch_size=BATCH_SIZE,validation_split=VALIDATION_SPLIT)
     def save_model(self):
-        pass
+        self.AEModel.save(SAVE_MODEL_PATH+'AEModel.h5')
+        self.encoder.save(SAVE_MODEL_PATH+'Encoder.h5')
     def load_model(self):
         pass
