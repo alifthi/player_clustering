@@ -49,4 +49,5 @@ class train_model:
         self.AEModel.save(SAVE_MODEL_PATH+'AEModel.h5')
         self.encoder.save(SAVE_MODEL_PATH+'Encoder.h5')
     def load_model(self):
-        pass
+        self.AEModel = tf.keras.models.load_model(SAVE_MODEL_PATH+'AEModel.h5')
+        self.encoder = tf.keras.models.load_model(SAVE_MODEL_PATH+'Encoder.h5')
